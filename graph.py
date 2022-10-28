@@ -11,7 +11,7 @@ def get_graph_from_file(file_name):
     >>> get_graph_from_file("data1.txt")
     [[1, 2], [3, 4], [1, 5]]
     """
-    pass
+    with open(file)
 
 def to_edge_dict(edge_list):
     """ 
