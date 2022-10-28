@@ -15,7 +15,7 @@ def get_graph_from_file(file_name):
         output = []
         for i in file.readlines():
             output.append(i.strip().split(","))
-        output = [ [int[i] for i in item] for item in output]
+        output = [ [int(i) for i in item] for item in output]
     return output
 
 def to_edge_dict(edge_list):
