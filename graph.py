@@ -11,7 +11,12 @@ def get_graph_from_file(file_name):
     >>> get_graph_from_file("data1.txt")
     [[1, 2], [3, 4], [1, 5]]
     """
-    with open(file)
+    with open(file_name, 'r') as file:
+        output = []
+        for i in file.readlines():
+            output.append(i.strip().split(","))
+        output = [ [int[i] for i in item] for item in output]
+    return output
 
 def to_edge_dict(edge_list):
     """ 
@@ -86,3 +91,7 @@ def convert_to_dot(graph):
     Save the graph to a file in a DOT format.
     """
     pass
+
+if __name__ == "__main__":
+    import doctest
+    print(doctest.testmod())
