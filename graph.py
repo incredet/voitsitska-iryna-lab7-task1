@@ -53,7 +53,7 @@ def is_edge_in_graph(graph: dict, edge: tuple) -> bool:
     """
     return edge in [(key, val) for key, value in graph.items() for val in value]
 
-def add_edge(graph: dict, edge: tuple) -> dict:
+def add_edge(graph: dict, edge: tuple) -> dict: #check this function
     """
     Add a new edge to the graph and return new graph.
     Args:
@@ -63,12 +63,18 @@ def add_edge(graph: dict, edge: tuple) -> dict:
         the graph w the edge
     >>> add_edge({1: [2, 5], 2: [1, 4], 3: [4], 4: [2, 3], 5: [1]}, (1, 3))
     {1: [2, 5, 3], 2: [1, 4], 3: [4, 1], 4: [2, 3], 5: [1]}
+    >>> add_edge({1: [2], 2: [1]}, (1, 3))
+    {1: [2, 3], 2: [1], 3: [1]}
     """
+    if edge[0] not in graph.keys():
+        graph.setdefault(edge[0], [])
+    if edge[1] not in graph.keys():
+        graph.setdefault(edge[1], [])
     graph[edge[0]].append(edge[1])
     graph[edge[1]].append(edge[0])
     return graph
 
-def del_edge(graph: dict, edge: tuple) -> dict:
+def del_edge(graph: dict, edge: tuple) -> dict: #check this function and make it right
     """
     Delete an edge from the graph and return a new graph.
     Args:
@@ -79,9 +85,20 @@ def del_edge(graph: dict, edge: tuple) -> dict:
     >>> del_edge({1: [2, 5], 2: [1, 4], 3: [4], 4: [2, 3], 5: [1]}, (2, 4))
     {1: [2, 5], 2: [1], 3: [4], 4: [3], 5: [1]}
     """
-    graph[edge[0]].remove(edge[1])
-    graph[edge[1]].remove(edge[0])
-    return graph
+    try:
+        graph[edge[0]].remove(edge[1])
+        graph[edge[1]].remove(edge[0])
+        return graph
+    except KeyError:
+        try:
+            graph[edge[0]].remove(edge[1])
+            return graph
+        except KeyError:
+            try:
+                graph[edge[1]].remove(edge[0])
+                return graph
+            except KeyError:
+                return graph
 
 def add_node(graph: dict, node: int) -> dict:
     """
@@ -93,8 +110,11 @@ def add_node(graph: dict, node: int) -> dict:
         dict: the graph w node
     >>> add_node({1: [2], 2: [1]}, 3)
     {1: [2], 2: [1], 3: []}
+    >>> add_node({1: [2], 2: [1]}, 1)
+    {1: [2], 2: [1]}
     """
-    graph[node] = []
+    if node not in graph.keys():
+        graph[node] = []
     return graph
 
 def del_node(graph: dict, node: int) -> dict:
