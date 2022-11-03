@@ -53,7 +53,7 @@ def is_edge_in_graph(graph: dict, edge: tuple) -> bool:
     """
     return edge in [(key, val) for key, value in graph.items() for val in value]
 
-def add_edge(graph: dict, edge: tuple) -> dict: #check this function
+def add_edge(graph: dict, edge: tuple) -> dict:
     """
     Add a new edge to the graph and return new graph.
     Args:
@@ -65,6 +65,8 @@ def add_edge(graph: dict, edge: tuple) -> dict: #check this function
     {1: [2, 5, 3], 2: [1, 4], 3: [4, 1], 4: [2, 3], 5: [1]}
     >>> add_edge({1: [2], 2: [1]}, (1, 3))
     {1: [2, 3], 2: [1], 3: [1]}
+    >>> add_edge({1: [2], 2: [1]}, (3, 1))
+    {1: [2, 3], 2: [1], 3: [1]}
     """
     if edge[0] not in graph.keys():
         graph.setdefault(edge[0], [])
@@ -74,7 +76,7 @@ def add_edge(graph: dict, edge: tuple) -> dict: #check this function
     graph[edge[1]].append(edge[0])
     return graph
 
-def del_edge(graph: dict, edge: tuple) -> dict: #check this function and make it right
+def del_edge(graph: dict, edge: tuple) -> dict:
     """
     Delete an edge from the graph and return a new graph.
     Args:
@@ -84,21 +86,16 @@ def del_edge(graph: dict, edge: tuple) -> dict: #check this function and make it
         the graph w/out the edge
     >>> del_edge({1: [2, 5], 2: [1, 4], 3: [4], 4: [2, 3], 5: [1]}, (2, 4))
     {1: [2, 5], 2: [1], 3: [4], 4: [3], 5: [1]}
+    >>> del_edge({1: [2, 5], 2: [1, 4], 3: [4], 4: [2, 3], 5: [1]}, (2, 5))
+    {1: [2, 5], 2: [1, 4], 3: [4], 4: [2, 3], 5: [1]}
+    >>> del_edge({1: [2], 2: [1]}, (3, 1))
+    {1: [2], 2: [1]}
     """
-    try:
-        graph[edge[0]].remove(edge[1])
-        graph[edge[1]].remove(edge[0])
-        return graph
-    except KeyError:
-        try:
-            graph[edge[0]].remove(edge[1])
-            return graph
-        except KeyError:
-            try:
-                graph[edge[1]].remove(edge[0])
-                return graph
-            except KeyError:
-                return graph
+    for key, value in graph.items():
+        for val in value:
+            if key in edge and val in edge:
+                graph[key].remove(val)
+    return graph
 
 def add_node(graph: dict, node: int) -> dict:
     """
